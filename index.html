@@ -15,23 +15,38 @@
     .attribution a { color: hsl(228, 45%, 44%); }
   </style>
 </head>
-<body class="">
+<body class="font-display">
+  <div class="container bg-[image:var(--hero-bg)] bg-cover bg-center h-[200px] md:h-[300px]">
+    <!-- TODO title + theme toggle sit here -->
+    <header class="flex justify-between items-center px-6 pt-12">
+      <h1 class="font-bold text-white text-2xl">T O D O</h1>
+      <button type="button" aria-label="Toggle dark mode">
+        <img src="images/icon-moon.svg" alt="">
+      </button>
+    </header>
+  </div>
 
-  Todo
+  <main class="-mt-24 px-6">
+    <input type="text" placeholder="Create a new todo..." class="bg-[hsl(var(--color-bg-primary))] text-[hsl(var(--color-text-primary))] placeholder:text-[hsl(var(--color-text-muted))] w-full max-w-lg mx-auto rounded-md shadow-md px-4 py-3 mb-6">
+    <!-- input + todo list cards overlap the image -->
+  </main>
 
-  <!-- Add dynamic number --> items left
+  <!-- Todo -->
 
-  All
+  <!-- Add dynamic number --> 
+   <!-- items left -->
+
+  <!-- All
   Active 
   Completed
 
   Clear Completed
 
-  Drag and drop to reorder list
+  Drag and drop to reorder list -->
 
   <footer class="attribution">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
+    Coded by <a href="#">Henry</a>.
   </footer>
 </body>
 </html>
