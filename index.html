@@ -15,38 +15,48 @@
     .attribution a { color: hsl(228, 45%, 44%); }
   </style>
 </head>
-<body class="font-display">
-  <div class="container bg-[image:var(--hero-bg)] bg-cover bg-center h-[200px] md:h-[300px]">
+<body class="bg-[hsl(var(--color-bg-primary))] font-display min-h-screen">
+  <div class=" bg-[image:var(--hero-bg)] bg-cover bg-center h-[200px] md:h-[250px] ">
     <!-- TODO title + theme toggle sit here -->
-    <header class="flex justify-between items-center px-6 pt-12">
+    <header class="max-w-3xl mx-auto flex justify-between items-center px-6 pt-12">
       <h1 class="font-bold text-white text-2xl">T O D O</h1>
-      <button type="button" aria-label="Toggle dark mode">
-        <img src="images/icon-moon.svg" alt="">
+      <button id="toggleBtn" type="button" aria-label="Toggle dark mode">
+        <img id="toogleImg" src="images/icon-moon.svg" alt="">
       </button>
     </header>
   </div>
 
-  <main class="-mt-24 px-6">
-    <input type="text" placeholder="Create a new todo..." class="bg-[hsl(var(--color-bg-primary))] text-[hsl(var(--color-text-primary))] placeholder:text-[hsl(var(--color-text-muted))] w-full max-w-lg mx-auto rounded-md shadow-md px-4 py-3 mb-6">
+  <main class="max-w-3xl mx-auto -mt-24 px-6">
+    <div class="flex flex-row space-x-2 items-center bg-[hsl(var(--color-bg-elevated))] h-full w-full rounded-md shadow-md pl-4">
+      <button id="addBtn" type="button" aria-label="Add todo to list" class="w-5 h-5 rounded-full border border-[hsl(var(--color-bg-subtle))]"></button>
+      <input id="inputArea" type="text" placeholder="Create a new todo..." class=" bg-[hsl(var(--color-bg-elevated))] text-[hsl(var(--color-text-primary))] placeholder:text-[hsl(var(--color-text-muted))]  rounded-md w-full py-4 self-center focus:outline-[hsl(var(--color-accent))] focus:outline-2 focus:outline-offset-2">
+    </div>
     <!-- input + todo list cards overlap the image -->
+
+    <ul id="ul" class="bg-[hsl(var(--color-bg-elevated))] rounded-md shadow-md mt-6 px-4 flex flex-col">
+
+      <li id="display" class="hidden flex flex-row justify-between py-4 mt-auto">
+        <p id="itemsRemaing" class="text-[hsl(var(--color-text-muted))]">5 items left</p>
+        <p id="clearCompleted" class="text-[hsl(var(--color-text-muted))]">clear completed</p>
+      </li>
+    </ul>
+
+    <div id="filters" class="hidden bg-[hsl(var(--color-bg-elevated))] rounded-md shadow-md mt-6 p-4 flex flex-row justify-center space-x-4">
+      <button id="allBtn" class="text-[hsl(var(--color-text-muted))]">All</button>
+      <button id="activeBtn" class="text-[hsl(var(--color-text-muted))]">Active</button>
+      <button id="completedBtn" class="text-[hsl(var(--color-text-muted))]">Completed</button>
+    </div>
+
+    <div id="drag" class="hidden flex flex-row justify-center mt-8 text-[hsl(var(--color-text-muted))]">
+      Drag and drop to reorder list
+    </div>
   </main>
 
-  <!-- Todo -->
-
-  <!-- Add dynamic number --> 
-   <!-- items left -->
-
-  <!-- All
-  Active 
-  Completed
-
-  Clear Completed
-
-  Drag and drop to reorder list -->
-
-  <footer class="attribution">
+  <footer class="attribution  fixed bottom-0 left-0 w-full py-4  text-[hsl(var(--color-text-muted))]">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
     Coded by <a href="#">Henry</a>.
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

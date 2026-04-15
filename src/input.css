@@ -9,11 +9,13 @@
     --hero-bg: url('/images/bg-mobile-light.jpg');
 
   --color-bg-primary: 0 0% 98%; /* Gray 50 */
-  --color-bg-subtle: 234 39% 85%; /* Purple 300 */
+  --color-bg-elevated: 0 0% 100%; /* White */
+  /* --color-text-subtle: 235 19% 35%; Purple 300 */
   --color-border-default: 233 11% 84%; /* Gray 300 */
   --color-text-muted: 236 9% 61%; /* Gray 600 */
   --color-text-primary: 235 19% 35%; /* Navy 850 */
   --color-accent: 220 98% 61%; /* Blue 500 — primary */
+  /* --color-bg-subtle */
 }
 
 .dark {
@@ -26,9 +28,75 @@
   --color-border-default: 233 14% 35%; /* Purple 700 */
   --color-border-strong: 235 16% 43%; /* Purple 600 */
   --color-text-muted: 236 9% 61%; /* Gray 600 */
-  --color-text-subtle: 234 39% 85%; /* Purple 300 */
+  --color-text-primary: 234 39% 85%; /* Purple 300 */
   --color-accent: 220 98% 61%; /* Blue 500 — primary */
 }
+
+.li{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid hsl(var(--color-bg-subtle))
+}
+
+.divBox{
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+}
+
+/* LI */
+.todo-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+/* Complete Button */
+.complete-btn {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--color-text-muted));
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
+.complete-btn:hover {
+  border: 2px solid ;
+  border-image: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%) );
+  border-image-slice: 1;
+  border-radius: 9999px;
+
+}
+
+/* Check Icon */
+.todo-check-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* Paragraph */
+.todo-text {
+  color: hsl(var(--color-text-primary));
+}
+
+/* Delete Button */
+.todo-delete-btn {
+  /* add any styling you want here */
+}
+
+
 
 
 @media (min-width: 1024px) {
@@ -39,4 +107,20 @@
     .dark {
       --hero-bg: url('/images/bg-desktop-dark.jpg');
     }
+}
+
+.check{
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+}
+
+.checked{
+  background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%) ) ;
+}
+
+
+.completed-text{
+  text-decoration: line-through;
+  color: hsl(var(--color-text-muted));
 }
