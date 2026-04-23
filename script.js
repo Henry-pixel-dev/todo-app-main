@@ -1,17 +1,17 @@
 let task = JSON.parse(localStorage.getItem("task")) || [];
 
-window.addEventListener('load', () => {
-    task.forEach(taskObj => {
-        if (ul.childElementCount === 1) {
+// window.addEventListener('load', () => {
+//     task.forEach(taskObj => {
+//         if (ul.childElementCount === 1) {
             
-            const newText = taskObj.text;
-            addTask(newText);
-        }else {
-            return;
-        } 
+//             const newText = taskObj.text;
+//             addTask(newText);
+//         }else {
+//             return;
+//         } 
             
-    });    
-})
+//     });    
+// })
 
 const toggleBtn = document.getElementById('toggleBtn');
 const addBtn = document.getElementById('addBtn');
@@ -19,16 +19,21 @@ const inputArea = document.getElementById('inputArea');
 const ul = document.getElementById('ul');
 const itemsRemaining = document.getElementById('itemsRemaing');
 const clearCompleted = document.getElementById('clearCompleted');
-const allBtn = document.getElementById('allBtn');
-const activeBtn = document.getElementById('activeBtn');
-const completedBtn = document.getElementById('completedBtn');
+// const allBtn = document.getElementById('allBtn');
+// const activeBtn = document.getElementById('activeBtn');
+// const completedBtn = document.getElementById('completedBtn');
 const toogleImg = document.getElementById('toogleImg');
-const filters = document.getElementById('filters');
+const filters = document.querySelectorAll('.filters');
 const drag = document.getElementById('drag');
 const display = document.getElementById('display');
 const completeImg = document.createElement('img');
 completeImg.src = 'images/icon-check.svg';
 completeImg.style.display = 'none'
+
+
+function isVissible(el){
+    return el.offsetParent !== null;
+}
 
 
 function addTask(text) { 
@@ -67,12 +72,36 @@ function addTask(text) {
 
     inputArea.value = '';
 
-    filters.classList.remove('hidden');
     display.classList.remove('hidden');
     drag.classList.remove('hidden');
-    filters.style.display = 'flex';
     display.style.display = 'flex';
     drag.style.display = 'flex'
+
+    filters.forEach(fliter =>{
+        const subcard = fliter.children[0];
+
+        if (isVissible(subcard)) {
+            console.log(subcard.classList.contains('hidden'))
+            return;
+        } else {
+            
+            fliter.classList.remove('hidden');
+            fliter.style.display = 'flex';
+        }
+
+        const allBtn = subcard.querySelector(".allBtn")
+        const activeBtn = subcard.querySelector(".activeBtn")
+        const completedTaskBtn = subcard.querySelector(".completedBtn")
+
+        // Inside your filters.forEach block, replace the event listeners with:
+        allBtn.addEventListener('click', () => render(task));
+
+        activeBtn.addEventListener('click', () => render(task.filter(t => !t.completed)));
+
+        completedTaskBtn.addEventListener('click', () => render(task.filter(t => t.completed)));
+
+    })
+    
     
 
     completeBtn.addEventListener('click', () => {
@@ -104,13 +133,21 @@ function addTask(text) {
         console.log(users)
 
         if(ul.childElementCount === 1) {
-            filters.style.display = 'none';
+            // filters.style.display = 'none';
             display.style.display = 'none';
             drag.style.display = 'none'
+
+            filters.forEach(filter => {
+                filter.style.display = 'none'
+            })
         } else {
-            filters.style.display = 'flex';
+            // filters.style.display = 'flex';
             display.style.display = 'flex';
             drag.style.display = 'flex'
+
+            filters.forEach(filter => {
+                filter.style.display = 'flex'
+            })
         }
     })
 }
@@ -128,33 +165,82 @@ addBtn.addEventListener('click', () => {
     addTask(displaytext);
 })
 
-function updateItemsRemaining() {
-
-}
 
 
 function render(arrayToRender) {
-    ul.innerHTML = '';
+    // Remove all existing li elements except the display/drag elements
+    const existingItems = ul.querySelectorAll('li.li');
+    existingItems.forEach(li => li.remove());
+
     arrayToRender.forEach(t => {
         const li = document.createElement('li');
-        li.textContent = t.text
-        if(t.completed) li.classList.add('done');
-        ul.append(li)    
-    })
+        const divBox = document.createElement('div');
+        const completeBtn = document.createElement('button');
+        const deleteBtn = document.createElement('button');
+        const deleteImg = document.createElement('img');
+        const checkImg = document.createElement('img');
+        const p = document.createElement('p');
+
+        deleteImg.src = 'images/icon-cross.svg';
+        checkImg.src = 'images/icon-check.svg';
+        checkImg.classList.add('todo-check-icon');
+        checkImg.style.display = t.completed ? 'block' : 'none';
+
+        li.classList.add('li');
+        divBox.classList.add('divBox');
+        completeBtn.classList.add('complete-btn');
+        if (t.completed) completeBtn.classList.add('checked');
+        p.classList.add('todo-text');
+        if (t.completed) p.classList.add('completed-text');
+
+        p.textContent = t.text;
+
+        completeBtn.appendChild(checkImg);
+        deleteBtn.appendChild(deleteImg);
+        divBox.appendChild(completeBtn);
+        divBox.appendChild(p);
+        li.appendChild(divBox);
+        li.appendChild(deleteBtn);
+        ul.insertBefore(li, display);
+
+        // Toggle complete
+        completeBtn.addEventListener('click', () => {
+            task = task.map(tk =>
+                tk.id === t.id ? { ...tk, completed: !tk.completed } : tk
+            );
+            // Update local t reference
+            t.completed = !t.completed;
+            localStorage.setItem("task", JSON.stringify(task));
+
+            checkImg.style.display = t.completed ? 'block' : 'none';
+            completeBtn.classList.toggle('checked');
+            p.classList.toggle('completed-text');
+            updateItemsRemaining();
+        });
+
+        // Delete task
+        deleteBtn.addEventListener('click', () => {
+            task = task.filter(tk => tk.id !== t.id);
+            localStorage.setItem("task", JSON.stringify(task));
+            li.remove();
+
+            if (ul.querySelectorAll('li.li').length === 0) {
+                display.style.display = 'none';
+                drag.style.display = 'none';
+                filters.forEach(f => f.style.display = 'none');
+            }
+
+            updateItemsRemaining();
+        });
+    });
+
+    updateItemsRemaining();
 }
 
-completedBtn.addEventListener('click', () => {
-   const completedTasks = task.filter(t => t.completed);
-render(completedTasks);
+function updateItemsRemaining() {
+    const remaining = task.filter(t => !t.completed).length;
+    itemsRemaining.textContent = `${remaining} item${remaining !== 1 ? 's' : ''} left`;
+}
 
-})
 
-activeBtn.addEventListener('click', () => {
-    const pendingTasks = task.filter(t => !t.completed);
-    render(pendingTasks);
-
-})
-allBtn.addEventListener('click', () => {
-    render(task)
-})
-// localStorage.clear()
+localStorage.clear()
