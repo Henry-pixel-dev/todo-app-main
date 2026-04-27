@@ -1,17 +1,6 @@
 let task = JSON.parse(localStorage.getItem("task")) || [];
 
-// window.addEventListener('load', () => {
-//     task.forEach(taskObj => {
-//         if (ul.childElementCount === 1) {
-            
-//             const newText = taskObj.text;
-//             addTask(newText);
-//         }else {
-//             return;
-//         } 
-            
-//     });    
-// })
+
 
 const toggleBtn = document.getElementById('toggleBtn');
 const addBtn = document.getElementById('addBtn');
@@ -30,6 +19,7 @@ const completeImg = document.createElement('img');
 completeImg.src = 'images/icon-check.svg';
 completeImg.style.display = 'none'
 
+let draggedItem = null;
 
 function isVissible(el){
     return el.offsetParent !== null;
@@ -55,7 +45,8 @@ function addTask(text) {
     deleteImg.src = 'images/icon-cross.svg';
     const p = document.createElement('p');
 
-
+    li.setAttribute('draggable', 'true');
+    
     li.classList.add('li');
     divBox.classList.add('divBox');
     completeBtn.classList.add('complete-btn');
@@ -203,12 +194,12 @@ function render(arrayToRender) {
         li.appendChild(deleteBtn);
         ul.insertBefore(li, display);
 
-        // Toggle complete
+    
         completeBtn.addEventListener('click', () => {
             task = task.map(tk =>
                 tk.id === t.id ? { ...tk, completed: !tk.completed } : tk
             );
-            // Update local t reference
+            
             t.completed = !t.completed;
             localStorage.setItem("task", JSON.stringify(task));
 
@@ -218,7 +209,7 @@ function render(arrayToRender) {
             updateItemsRemaining();
         });
 
-        // Delete task
+        
         deleteBtn.addEventListener('click', () => {
             task = task.filter(tk => tk.id !== t.id);
             localStorage.setItem("task", JSON.stringify(task));
@@ -243,4 +234,65 @@ function updateItemsRemaining() {
 }
 
 
+// function getDragAfterElement(container, y) {
+//   const draggableElements = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
+
+//   return draggableElements.reduce((closest, child) => {
+//     const box = child.getBoundingClientRect();
+//     const offset = y - box.top - box.height / 2;
+    
+//     if (offset < 0 && offset > closest.offset) {
+//       return { offset: offset, element: child };
+//     } else {
+//       return closest;
+//     }
+//   }, { offset: Number.NEGATIVE_INFINITY }).element;
+// }
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.li:not(.dragging)')];
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;    
+
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+ul.addEventListener('dragstart', (e) => {
+    draggedItem = e.target;
+    setTimeout(() => {
+    e.target.classList.add('dragging');
+  }, 0);
+})
+
+
+ul.addEventListener('dragover', (e) => {
+    e.preventDefault
+    const afterElement = getDragAfterElement(ul, e.clientY);
+
+    document.querySelectorAll('.li:not(.dragging)').forEach(li => {
+        li.classList.remove('over')
+    })
+
+    if (afterElement) {
+        afterElement.classList.add('over')
+        ul.insertBefore(draggedItem, afterElement);
+    } else {
+        ul.appendChild(draggedItem);
+    }
+})
+
+ul.addEventListener('dragend', (e) => {
+    e.target.classList.remove('dragging');
+    document.querySelectorAll('.li').forEach(li => {
+        li.classList.remove('over')
+    })
+    draggedItem = null;
+})
 localStorage.clear()

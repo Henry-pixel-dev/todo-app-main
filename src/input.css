@@ -124,3 +124,8 @@
   text-decoration: line-through;
   color: hsl(var(--color-text-muted));
 }
+
+.dragging {
+    opacity: 0.4;
+    background: #e0e0e0;
+}
